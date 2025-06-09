@@ -38,6 +38,10 @@
                             </button>
                         </div>
 
+                        <div class="d-flex ">
+                            <button class="btn btn-primary" id="reset">Reset</button>
+                        </div>
+
 
                     </div>
                     <table id="datatable" class="table table-hover table-bordered align-middle text-nowrap">
@@ -68,7 +72,7 @@
                                     <td>
                                         @if ($product->image)
                                             <img src="{{ asset($product->image) }}" alt="Product Image"
-                                                class="img-thumbnail" style="max-width: 60px; height: auto;">
+                                                class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
                                         @else
                                             N/A
                                         @endif
@@ -205,7 +209,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-
             $('#addProductBtn').click(() => {
                 $('#productForm')[0].reset();
                 $('#imagePreview').html('');
@@ -214,7 +217,6 @@
                 $('.error-text').text('');
                 $('#productModal').modal('show');
             });
-
 
             $(document).on('click', '.editBtn', function() {
                 console.log("Edit button clicked");
@@ -231,19 +233,6 @@
                 const discount = $(this).data('discount');
                 const finalAmount = $(this).data('final-amount');
 
-                console.log("Data from button:", {
-                    id,
-                    name,
-                    subcategoryId,
-                    image,
-                    status,
-                    specification,
-                    rate,
-                    unit,
-                    quantity,
-                    discount,
-                    finalAmount
-                });
                 $('#name').val(name);
                 $('#product_id').val(id);
                 $('#subcategory_id').val(subcategoryId);
@@ -262,7 +251,6 @@
                 $('#productModalLabel').text('Edit Product');
 
             });
-
 
 
             $(document).on('click', '.deleteBtn', function() {
@@ -312,67 +300,106 @@
 
 
 
-            $('.searchInput').on('input', function() {
-                const x = $(this).val(); // updated value of the input
-                console.log("Value is " + x);
+            //             $('.searchInput').on('input', function() {
+            //                 const x = $(this).val(); // updated value of the input
+            //                 console.log("Value is " + x);
 
-                $.ajax({
-                    url: '{{ route('common.getdata') }}',
-                    type: 'POST',
-                    data: {
-                        data: "product",
-                        search: x,
-                    },
-                    success: function(response) {
-                        console.log(response);
+            //                 $.ajax({
+            //                     url: '{{ route('common.getdata') }}',
+            //                     type: 'POST',
+            //                     data: {
+            //                         data: "product",
+            //                         search: x,
+            //                     },
+            //                     success: function(response) {
+            //                         console.log(response);
 
-                        $("tbody").empty(); // Clear existing rows
-                        $.each(response, function(key, value) {
-                            $('tbody').append(
-                                `<tr>
-                                    <td>${key+1}</td>
-                                    <td>${value.name}</td>
-                                    <td>${value.subcategory_id ? value.subcategory_id : 'N/A'}</td>
-                                    <td>${new Date(value.created_at).toLocaleString()}</td>
-                                    <td>${value.specifications}</td>
-                                    <td>
-                                            ${value.image
-                                                ? `<img src="/${value.image}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">` 
-                                                : `<span>No Image</span>`}
-                                        </td>
-                                    <td>${value.rate}</td>
-                                    <td>${value.unit}</td>
-                                    <td>${value.discount}</td>
-                                    <td>${value.final_amount}</td>
-                                    <td>${value.status}</td>
-                                    <td>
-                                        <div class="d-flex gap-1">
-                                            <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}" data-image="${value.image}" data-status="${value.status}" data-subcategory-id="${value.subcategory_id}" data-specification="${value.specifications}" data-rate="${value.rate}" data-unit="${value.unit}" data-quantity="${value.quantity}" data-discount="${value.discount}" data-final-amount="${value.final_amount}"><i class="fas fa-edit"></i>
-</button>
-                                            <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
-</button>
-                                        </div>
-                                    </td>
-                                </tr>`
-                            );
-                        });
-                        if (response.length === 0) {
-                            $('tbody').append(
-                                '<tr><td colspan="12" class="text-center">No products found</td></tr>'
-                            );
-                        }
-                    },
-                    error: function() {
-                        alert("Error while searching");
-                    }
+            //                         $("tbody").empty(); // Clear existing rows
+            //                         $.each(response, function(key, value) {
+            //                             $('tbody').append(
+            //                                 `<tr>
+        //                                     <td>${key+1}</td>
+        //                                     <td>${value.name}</td>
+        //                                     <td>${value.subcategory_id ? value.subcategory_id : 'N/A'}</td>
+        //                                     <td>${new Date(value.created_at).toLocaleString()}</td>
+        //                                     <td>${value.specifications}</td>
+        //                                     <td>
+        //                                             ${value.image
+        //                                                 ? `<img src="/${value.image}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">` 
+        //                                                 : `<span>No Image</span>`}
+        //                                         </td>
+        //                                     <td>${value.rate}</td>
+        //                                     <td>${value.unit}</td>
+        //                                     <td>${value.discount}</td>
+        //                                     <td>${value.final_amount}</td>
+        //                                     <td>${value.status}</td>
+        //                                     <td>
+        //                                         <div class="d-flex gap-1">
+        //                                             <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}" data-image="${value.image}" data-status="${value.status}" data-subcategory-id="${value.subcategory_id}" data-specification="${value.specifications}" data-rate="${value.rate}" data-unit="${value.unit}" data-quantity="${value.quantity}" data-discount="${value.discount}" data-final-amount="${value.final_amount}"><i class="fas fa-edit"></i>
+        // </button>
+        //                                             <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
+        // </button>
+        //                                         </div>
+        //                                     </td>
+        //                                 </tr>`
+            //                             );
+            //                         });
+            //                         if (response.length === 0) {
+            //                             $('tbody').append(
+            //                                 '<tr><td colspan="12" class="text-center">No products found</td></tr>'
+            //                             );
+            //                         }
+            //                     },
+            //                     error: function() {
+            //                         alert("Error while searching");
+            //                     }
 
+            //                 });
+
+            //             });
+
+
+
+            function loadData(response) {
+                if (response.length === 0) {
+                    $('tbody').append(
+                        '<tr><td colspan="18" class="text-center">No products found</td></tr>'
+                    );
+                    return;
+                }
+                $.each(response, function(key, value) {
+                    $('tbody').append(
+                        `<tr>
+                        <td>${key+1}</td>
+                        <td>${value.name}</td>
+                        <td>${value.subcategory_id ? value.subcategory_id : 'N/A'}</td>
+                        <td>${new Date(value.created_at).toLocaleString()}</td>
+                        <td>${value.specifications}</td>
+                        <td>
+                            ${value.image
+                                ? `<img src="/${value.image}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">` 
+                                : `<span>No Image</span>`}
+                        </td>
+                        <td>${value.rate}</td>
+                        <td>${value.unit}</td>
+                        <td>${value.discount}</td>
+                        <td>${value.final_amount}</td>
+                        <td>${value.status}</td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}" data-image="${value.image}" data-status="${value.status}" data-subcategory-id="${value.subcategory_id}" data-specification="${value.specifications}" data-rate="${value.rate}" data-unit="${value.unit}" data-quantity="${value.quantity}" data-discount="${value.discount}" data-final-amount="${value.final_amount}"><i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`
+                    );
                 });
-
-            });
+            }
 
 
             $('.searchBtn').click(function() {
-
                 if ($('#from').val() && $('#to').val() && $('.searchInput').val()) {
                     console.log($('#from').val() + " " + $('#to').val() + " " + $('.searchInput')
                         .val());
@@ -384,46 +411,12 @@
                         search: $('.searchInput').val()
                     }, function(response) {
                         console.log(response);
-                        $("tbody").empty(); // Clear existing rows
-                        $.each(response, function(key, value) {
-                            $('tbody').append(
-                                `<tr>
-                                    <td>${key+1}</td>
-                                    <td>${value.name}</td>
-                                    <td>${value.subcategory_id ? value.subcategory_id : 'N/A'}</td>
-                                    <td>${new Date(value.created_at).toLocaleString()}</td>
-                                    <td>${value.specifications}</td>
-                                    <td>
-                                            ${value.image
-                                                ? `<img src="/${value.image}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">` 
-                                                : `<span>No Image</span>`}
-                                        </td>
-                                    <td>${value.rate}</td>
-                                    <td>${value.unit}</td>
-                                    <td>${value.discount}</td>
-                                    <td>${value.final_amount}</td>
-                                    <td>${value.status}</td>
-                                    <td>
-                                        <div class="d-flex gap-1">
-                                            <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}" data-image="${value.image}" data-status="${value.status}" data-subcategory-id="${value.subcategory_id}" data-specification="${value.specifications}" data-rate="${value.rate}" data-unit="${value.unit}" data-quantity="${value.quantity}" data-discount="${value.discount}" data-final-amount="${value.final_amount}"><i class="fas fa-edit"></i>
-</button>
-                                            <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
-</button>
-                                        </div>
-                                    </td>
-                                </tr>`
-                            );
-                        });
-                        if (response.length === 0) {
-                            $('tbody').append(
-                                '<tr><td colspan="12" class="text-center">No products found</td></tr>'
-                            );
-                        }
+                        $("tbody").empty();
+                        loadData(response);
                     });
 
                 } else {
                     const type = $(this).data('type');
-
                     if (type === 'name') {
                         const searchValue = $(this).siblings('.searchInput').val();
                         if (!searchValue) {
@@ -440,42 +433,8 @@
                             },
                             success: function(response) {
                                 console.log(response);
-
-                                $("tbody").empty(); // Clear existing rows
-                                $.each(response, function(key, value) {
-                                    $('tbody').append(
-                                        `<tr>
-                                    <td>${key+1}</td>
-                                    <td>${value.name}</td>
-                                    <td>${value.subcategory_id ? value.subcategory_id : 'N/A'}</td>
-                                    <td>${new Date(value.created_at).toLocaleString()}</td>
-                                    <td>${value.specifications}</td>
-                                    <td>
-                                            ${value.image
-                                                ? `<img src="/${value.image}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">` 
-                                                : `<span>No Image</span>`}
-                                        </td>
-                                    <td>${value.rate}</td>
-                                    <td>${value.unit}</td>
-                                    <td>${value.discount}</td>
-                                    <td>${value.final_amount}</td>
-                                    <td>${value.status}</td>
-                                    <td>
-                                        <div class="d-flex gap-1">
-                                            <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}" data-image="${value.image}" data-status="${value.status}" data-subcategory-id="${value.subcategory_id}" data-specification="${value.specifications}" data-rate="${value.rate}" data-unit="${value.unit}" data-quantity="${value.quantity}" data-discount="${value.discount}" data-final-amount="${value.final_amount}"><i class="fas fa-edit"></i>
-</button>
-                                            <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
-</button>
-                                        </div>
-                                    </td>
-                                </tr>`
-                                    );
-                                });
-                                if (response.length === 0) {
-                                    $('tbody').append(
-                                        '<tr><td colspan="12" class="text-center">No products found</td></tr>'
-                                    );
-                                }
+                                $("tbody").empty();
+                                loadData(response);
                             },
                             error: function() {
                                 alert("Error while searching");
@@ -499,42 +458,8 @@
                             },
                             success: function(response) {
                                 console.log(response);
-
-                                $("tbody").empty(); // Clear existing rows
-                                $.each(response, function(key, value) {
-                                    $('tbody').append(
-                                        `<tr>
-                                    <td>${key+1}</td>
-                                    <td>${value.name}</td>
-                                    <td>${value.subcategory_id ? value.subcategory_id : 'N/A'}</td>
-                                    <td>${new Date(value.created_at).toLocaleString()}</td>
-                                    <td>${value.specifications}</td>
-                                    <td>
-                                            ${value.image
-                                                ? `<img src="/${value.image}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">` 
-                                                : `<span>No Image</span>`}
-                                        </td>
-                                    <td>${value.rate}</td>
-                                    <td>${value.unit}</td>
-                                    <td>${value.discount}</td>
-                                    <td>${value.final_amount}</td>
-                                    <td>${value.status}</td>
-                                    <td>
-                                        <div class="d-flex flex-column gap-1">
-                                            <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}" data-image="${value.image}" data-status="${value.status}" data-subcategory-id="${value.subcategory_id}" data-specification="${value.specifications}" data-rate="${value.rate}" data-unit="${value.unit}" data-quantity="${value.quantity}" data-discount="${value.discount}" data-final-amount="${value.final_amount}"><i class="fas fa-edit"></i>
-</button>
-                                            <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
-</button>
-                                        </div>
-                                    </td>
-                                </tr>`
-                                    );
-                                });
-                                if (response.length === 0) {
-                                    $('tbody').append(
-                                        '<tr><td colspan="12" class="text-center">No products found</td></tr>'
-                                    );
-                                }
+                                $("tbody").empty();
+                                loadData(response);
                             },
                             error: function(xhr) {
                                 let errMsg = xhr.responseJSON?.error || 'Something went wrong';
@@ -547,6 +472,29 @@
                         alert("Invalid search type.");
                     }
                 }
+            });
+
+
+            $('#reset').on('click', function() {
+                $('#from').val('');
+                $('#to').val('');
+                $('.searchInput').val('');
+
+                $.ajax({
+                    url: '{{ route('admin.productsData') }}',
+                    type: 'GET',
+                    success: function(response) {
+                        console.log(response);
+                        response = typeof response === 'string' ? JSON.parse(response) :
+                            response;
+                        $("tbody").empty();
+                        loadData(response.data);
+                    },
+                    error: function(xhr) {
+                        console.error("error");
+                    },
+                });
+
             });
         });
     </script>

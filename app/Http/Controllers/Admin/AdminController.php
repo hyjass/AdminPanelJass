@@ -22,12 +22,19 @@ class AdminController extends Controller
     public function dashboard()
     {
         if (Auth::check() && Auth::user()->role == 'admin') {
-            $data = Admins::all();
-            return view('admin.dashboard', ['data' => $data]);
+            return view('admin.dashboard');
         }
         return redirect()->route('login');
     }
 
+
+    public function profile()
+    {
+        if (Auth::check()) {
+            return view('admin.profile');
+        }
+        return redirect()->route('login');
+    }
 
     public function products()
     {
@@ -37,6 +44,31 @@ class AdminController extends Controller
                 'products' => \App\Models\Product::all()
             ]
         );
+    }
+
+    public function usersData()
+    {
+        $data = Admins::all();
+        return ['data' => $data];
+    }
+
+
+    public function categorysData()
+    {
+        $data = \App\Models\Category::all();
+        return ['data' => $data];
+    }
+
+    public function subcategorysData()
+    {
+        $data = \App\Models\Subcategory::all();
+        return ['data' => $data];
+    }
+
+    public function productsData()
+    {
+        $data = \App\Models\Product::all();
+        return ['data' => $data];
     }
 
 

@@ -37,7 +37,9 @@
                             </button>
                         </div>
 
-
+                        <div class="d-flex ">
+                            <button class="btn btn-primary" id="reset">Reset</button>
+                        </div>
                     </div>
 
                     <table id="datatable" class="table table-hover table-bordered">
@@ -169,7 +171,6 @@
                 $('#subCategoryModal').modal('show');
             });
 
-
             $(document).on('click', '.editBtn', function() {
                 console.log("Edit button clicked");
 
@@ -198,8 +199,6 @@
                 $('#subCategoryModalLabel').text('Edit SubCategory');
             });
 
-
-
             $(document).on('click', '.deleteBtn', function() {
                 const id = $(this).data('id');
                 console.log("Delete button clicked for ID:", id);
@@ -219,7 +218,6 @@
                     }
                 });
             });
-
 
             $('#subCategoryForm').on('submit', function(e) {
                 e.preventDefault();
@@ -248,62 +246,62 @@
                 });
             });
 
-            $('.searchInput').on('input', function() {
-                const x = $(this).val(); // updated value of the input
-                console.log("Value is " + x);
+            // $('.searchInput').on('input', function() {
+            //     const x = $(this).val(); // updated value of the input
+            //     console.log("Value is " + x);
 
-                $.ajax({
-                    url: '{{ route('common.getdata') }}',
-                    type: 'POST',
-                    data: {
-                        data: "subcategory",
-                        search: x,
-                    },
-                    success: function(response) {
-                        console.log(response);
+            //     $.ajax({
+            //         url: '{{ route('common.getdata') }}',
+            //         type: 'POST',
+            //         data: {
+            //             data: "subcategory",
+            //             search: x,
+            //         },
+            //         success: function(response) {
+            //             console.log(response);
 
-                        $("tbody").empty(); // Clear existing rows
-                        $.each(response, function(key, value) {
-                            $('tbody').append(
-                                `<tr>
-                                        <td>${key+1}</td>
-                                        <td>${value.name}</td>
-                                        <td>${value.category_id ? value.category_id : 'N/A'}</td>
-                                        <td>
-                                            ${value.image
-                                                ? `<img src="/${value.image}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">` 
-                                                : `<span>No Image</span>`}
-                                        </td>
-                                        <td>${value.status}</td>
-                                        <td>${new Date(value.created_at).toLocaleString()}</td>
+            //             $("tbody").empty(); // Clear existing rows
+            //             $.each(response, function(key, value) {
+            //                 $('tbody').append(
+            //                     `<tr>
+        //                             <td>${key+1}</td>
+        //                             <td>${value.name}</td>
+        //                             <td>${value.category_id ? value.category_id : 'N/A'}</td>
+        //                             <td>
+        //                                 ${value.image
+        //                                     ? `<img src="/${value.image}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">` 
+        //                                     : `<span>No Image</span>`}
+        //                             </td>
+        //                             <td>${value.status}</td>
+        //                             <td>${new Date(value.created_at).toLocaleString()}</td>
 
-                                        <td>
-                                            <div class="d-flex gap-1">
-                                                <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}"
-                                                data-category-id="${value.category_id ? value.category_id : 'N/A'}" data-image="${value.image}" data-status="${value.status}"><i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        
-                                </tr>`
-                            );
+        //                             <td>
+        //                                 <div class="d-flex gap-1">
+        //                                     <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}"
+        //                                     data-category-id="${value.category_id ? value.category_id : 'N/A'}" data-image="${value.image}" data-status="${value.status}"><i class="fas fa-edit"></i>
+        //                                     </button>
+        //                                     <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
+        //                                     </button>
+        //                                 </div>
+        //                             </td>
 
-                        });
-                        if (response.length === 0) {
-                            $('tbody').append(
-                                '<tr><td colspan="12" class="text-center">No subcategories found</td></tr>'
-                            );
-                        }
-                    },
-                    error: function() {
-                        alert("Error while searching");
-                    }
+        //                     </tr>`
+            //                 );
 
-                });
+            //             });
+            //             if (response.length === 0) {
+            //                 $('tbody').append(
+            //                     '<tr><td colspan="12" class="text-center">No subcategories found</td></tr>'
+            //                 );
+            //             }
+            //         },
+            //         error: function() {
+            //             alert("Error while searching");
+            //         }
 
-            });
+            //     });
+
+            // });
 
             $('.searchBtn').click(function() {
 
@@ -318,44 +316,10 @@
                         search: $('.searchInput').val()
                     }, function(response) {
                         console.log(response);
-                        $("tbody").empty(); // Clear existing rows
-                        $.each(response, function(key, value) {
-                            $('tbody').append(
-                                `<tr>
-                                        <td>${key+1}</td>
-                                        <td>${value.name}</td>
-                                        <td>${value.category_id ? value.category_id : 'N/A'}</td>
-                                        <td>
-                                            ${value.image
-                                                ? `<img src="/${value.image}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">` 
-                                                : `<span>No Image</span>`}
-                                        </td>
-                                        <td>${value.status}</td>
-                                        <td>${new Date(value.created_at).toLocaleString()}</td>
-
-                                        <td>
-                                            <div class="d-flex gap-1">
-                                                <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}"
-                                                data-category-id="${value.category_id ? value.category_id : 'N/A'}" data-image="${value.image}" data-status="${value.status}"><i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        
-                                </tr>`
-                            );
-                        });
-                        if (response.length === 0) {
-                            $('tbody').append(
-                                '<tr><td colspan="12" class="text-center">No subcategories found</td></tr>'
-                            );
-                        }
-
+                        $("tbody").empty();
+                        loadData(response);
                     });
                 } else {
-
-
                     const type = $(this).data('type');
 
                     if (type === "name") {
@@ -371,40 +335,8 @@
                             },
                             success: function(response) {
                                 console.log(response);
-
-                                $("tbody").empty(); // Clear existing rows
-                                $.each(response, function(key, value) {
-                                    $('tbody').append(
-                                        `<tr>
-                                        <td>${key+1}</td>
-                                        <td>${value.name}</td>
-                                        <td>${value.category_id ? value.category_id : 'N/A'}</td>
-                                        <td>
-                                            ${value.image
-                                                ? `<img src="/${value.image}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">` 
-                                                : `<span>No Image</span>`}
-                                        </td>
-                                        <td>${value.status}</td>
-                                        <td>${new Date(value.created_at).toLocaleString()}</td>
-
-                                        <td>
-                                            <div class="d-flex gap-1">
-                                                <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}"
-                                                data-category-id="${value.category_id ? value.category_id : 'N/A'}" data-image="${value.image}" data-status="${value.status}"><i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        
-                                </tr>`
-                                    );
-                                });
-                                if (response.length === 0) {
-                                    $('tbody').append(
-                                        '<tr><td colspan="12" class="text-center">No subcategories found</td></tr>'
-                                    );
-                                }
+                                $("tbody").empty();
+                                loadData(response);
                             },
                             error: function() {
                                 alert("Error while searching");
@@ -429,46 +361,11 @@
                             },
                             success: function(response) {
                                 console.log(response);
-
-                                $("tbody").empty(); // Clear existing rows
-                                $.each(response, function(key, value) {
-                                    $('tbody').append(
-                                        `<tr>
-                                        <td>${key+1}</td>
-                                        <td>${value.name}</td>
-                                        <td>${value.category_id ? value.category_id : 'N/A'}</td>
-                                        <td>
-                                            ${value.image
-                                                ? `<img src="/${value.image}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">` 
-                                                : `<span>No Image</span>`}
-                                        </td>
-                                        <td>${value.status}</td>
-                                        <td>${new Date(value.created_at).toLocaleString()}</td>
-
-                                        <td>
-                                            <div class="d-flex gap-1">
-                                                <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}"
-                                                data-category-id="${value.category_id ? value.category_id : 'N/A'}" data-image="${value.image}" data-status="${value.status}"><i class="fas fa-edit"></i>
-                                                        </button>
-                                                <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        
-                                </tr>`
-                                    );
-                                });
-                                if (response.length === 0) {
-                                    $('tbody').append(
-                                        '<tr><td colspan="12" class="text-center">No products found</td></tr>'
-                                    );
-                                }
+                                $("tbody").empty();
+                                loadData(response);
                             },
                             error: function(xhr) {
-                                let errMsg = xhr.responseJSON?.error ||
-                                    'Something went wrong';
-                                alert('Error: ' + errMsg);
-                                console.error('Error details:', xhr.responseText);
+                                alert('ERROR');
                             }
                         });
                     } else {
@@ -478,8 +375,63 @@
 
             });
 
+            function loadData(response) {
+                if (response.length === 0) {
+                    $('tbody').append(
+                        '<tr><td colspan="12" class="text-center">No Subcategories found</td></tr>'
+                    );
+                    return;
+                }
+                $.each(response, function(key, value) {
+                    $('tbody').append(
+                        `<tr>
+                            <td>${key+1}</td>
+                            <td>${value.name}</td>
+                            <td>${value.category_id ? value.category_id : 'N/A'}</td>
+                            <td>
+                                ${value.image
+                                    ? `<img src="/${value.image}" alt="Image" style="width: 50px; height: 50px; object-fit: cover;">` 
+                                    : `<span>No Image</span>`}
+                            </td>
+                            <td>${value.status}</td>
+                            <td>${new Date(value.created_at).toLocaleString()}</td>
+
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}"
+                                    data-category-id="${value.category_id ? value.category_id : 'N/A'}" data-image="${value.image}" data-status="${value.status}"><i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>`
+                    );
+                });
+            }
 
 
+            $('#reset').on('click', function() {
+                $('#from').val('');
+                $('#to').val('');
+                $('.searchInput').val('');
+
+                $.ajax({
+                    url: '{{ route('admin.subcategorysData') }}',
+                    type: 'GET',
+                    success: function(response) {
+                        console.log(response);
+                        response = typeof response === 'string' ? JSON.parse(response) :
+                            response;
+                        $("tbody").empty();
+                        loadData(response.data);
+                    },
+                    error: function(xhr) {
+                        console.error("error");
+                    },
+                });
+
+            });
         });
     </script>
 @endpush

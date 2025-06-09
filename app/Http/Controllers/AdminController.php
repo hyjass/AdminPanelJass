@@ -53,15 +53,10 @@ class AdminController extends Controller
                 $data->name = $request->name;
                 $data->email = $request->email;
                 $data->country = $request->country;
-                if (!$request->role) {
-                    $data->role = "user";
-                } else {
-
-                    $data->role = $request->role;
-                }
                 if ($request->filled('password')) {
                     $data->password = bcrypt($request->password);
                 }
+                // dd($data);
                 $data->save();
             }
         } else {
