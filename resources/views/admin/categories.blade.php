@@ -70,7 +70,7 @@
                                     <td>{{ $category->status }}</td>
                                     <td>{{ $category->created_at->format('Y-m-d H:i:s') }}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-success editBtn" id="editCategoryBtn"
+                                        <button class="btn btn-sm btn-warning editBtn" id="editCategoryBtn"
                                             data-id="{{ $category->id }}" data-name="{{ $category->name }}"
                                             data-image="{{ $category->image }}" data-status="{{ $category->status }}">
                                             <i class="fas fa-edit"></i>
