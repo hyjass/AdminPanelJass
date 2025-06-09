@@ -41,6 +41,10 @@
                             </button>
                         </div>
 
+                        <div class="d-flex ">
+                            <button class="btn btn-primary" id="reset">Reset</button>
+                        </div>
+
 
                     </div>
                     <table id="datatable" class="table table-hover table-bordered">
@@ -120,13 +124,6 @@
                                     class="form-control input-field form-control-lg texts" placeholder="Email" required />
                             </div>
 
-                            {{-- <div data-mdb-input-init class="form-outline mb-4">
-                                <select name="role" id="role" class="form-select texts rounded-0" required>
-                                    <option value="" disabled selected>Select Role</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="user">User</option>
-                                </select>
-                            </div> --}}
 
                             <div data-mdb-input-init class="form-outline mb-4">
 
@@ -172,7 +169,6 @@
                 $('.error-text').text('');
                 $('#userModal').modal('show');
             });
-
 
             $(document).on('click', '.editBtn', function() {
                 console.log("Edit button clicked");
@@ -239,182 +235,199 @@
                 });
             });
 
-            $('.searchInput').on('input', function() {
-                const x = $(this).val(); // updated value of the input
-                console.log("Value is " + x);
+            //         $('.searchInput').on('input', function() {
+            //             const x = $(this).val(); // updated value of the input
+            //             console.log("Value is " + x);
 
 
-                $.ajax({
-                    url: '{{ route('common.getdata') }}',
-                    type: 'POST',
-                    data: {
-                        data: "user",
-                        search: x,
-                    },
-                    success: function(response) {
-                        console.log(response);
+            //             $.ajax({
+            //                 url: '{{ route('common.getdata') }}',
+            //                 type: 'POST',
+            //                 data: {
+            //                     data: "user",
+            //                     search: x,
+            //                 },
+            //                 success: function(response) {
+            //                     console.log(response);
 
-                        $("tbody").empty(); // Clear existing rows
-                        $.each(response, function(key, value) {
-                            if (value.role != 'admin') {
+            //                     $("tbody").empty(); // Clear existing rows
+            //                     $.each(response, function(key, value) {
+            //                         if (value.role != 'admin') {
 
-                                $('tbody').append(
-                                    `<tr>
-                                        <td>${key+1}</td>
-                                        <td>${value.name}</td>
-                                        <td>${value.email}</td>
-                                        <td>${value.role}</td>
-                                        <td>${value.country}</td>
-                                        <td>${new Date(value.created_at).toLocaleString()}</td>
-                                        <td>
-                                            <div class="d-flex gap-1">
-                                                <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}" data-image="${value.image}" data-email="${value.email}" data-country="${value.country}" data-role="${value.role}" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-edit"></i>
-    </button>
-                                                <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
-    
-                                                    </button>
-                                            </div>
-                                        </td>
-                                    </tr>`
-                                );
-                            }
-                        });
-                        if (response.length === 0) {
-                            $('tbody').append(
-                                '<tr><td colspan="12" class="text-center">No users found</td></tr>'
-                            );
-                        }
-                    },
-                    error: function() {
-                        alert("Error while searching");
+            //                             $('tbody').append(
+            //                                 `<tr>
+        //                                     <td>${key+1}</td>
+        //                                     <td>${value.name}</td>
+        //                                     <td>${value.email}</td>
+        //                                     <td>${value.role}</td>
+        //                                     <td>${value.country}</td>
+        //                                     <td>${new Date(value.created_at).toLocaleString()}</td>
+        //                                     <td>
+        //                                         <div class="d-flex gap-1">
+        //                                             <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}" data-image="${value.image}" data-email="${value.email}" data-country="${value.country}" data-role="${value.role}" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-edit"></i>
+        // </button>
+        //                                             <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
+
+        //                                                 </button>
+        //                                         </div>
+        //                                     </td>
+        //                                 </tr>`
+            //                             );
+            //                         }
+            //                     });
+            //                     if (response.length === 0) {
+            //                         $('tbody').append(
+            //                             '<tr><td colspan="12" class="text-center">No users found</td></tr>'
+            //                         );
+            //                     }
+            //                 },
+            //                 error: function() {
+            //                     alert("Error while searching");
+            //                 }
+
+            //             });
+
+            //         });
+
+            function loadData(response) {
+                if (response.length === 0) {
+                    $('tbody').append(
+                        '<tr><td colspan="18" class="text-center">No users found</td></tr>'
+                    );
+                    return;
+                }
+                $.each(response, function(key, value) {
+                    if (value.role != 'admin') {
+                        $('tbody').append(
+                            `<tr>
+                                <td>${key+1}</td>
+                                <td>${value.name}</td>
+                                <td>${value.email}</td>
+                                <td>${value.role}</td>
+                                <td>${value.country}</td>
+                                <td>${new Date(value.created_at).toLocaleString()}</td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}" data-image="${value.image}" data-email="${value.email}" data-country="${value.country}" data-role="${value.role}" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>`
+                        );
                     }
-
                 });
-
-            });
+            }
 
 
             $('.searchBtn').click(function() {
-                const type = $(this).data('type');
-                if (!type) {
-                    alert("Search type is not defined.");
-                    return;
-                }
-
-                if (type === "name") {
-                    const searchValue = $(this).siblings('.searchInput').val();
-                    if (!searchValue) {
-                        alert("Please enter a search value.");
-                        return;
-                    }
-                    console.log("Search Type:", type);
-                    console.log("Search Value:", searchValue);
-                    $.ajax({
-                        url: '{{ route('common.getdata') }}',
-                        type: 'POST',
-                        data: {
-                            data: "user",
-                            search: searchValue,
-                        },
-                        success: function(response) {
-                            console.log(response);
-
-                            $("tbody").empty(); // Clear existing rows
-                            $.each(response, function(key, value) {
-                                if (value.role != 'admin') {
-
-                                    $('tbody').append(
-                                        `<tr>
-                                        <td>${key+1}</td>
-                                        <td>${value.name}</td>
-                                        <td>${value.email}</td>
-                                        <td>${value.role}</td>
-                                        <td>${value.country}</td>
-                                        <td>${new Date(value.created_at).toLocaleString()}</td>
-                                        <td>
-                                            <div class="d-flex gap-1">
-                                                <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}" data-image="${value.image}" data-email="${value.email}" data-country="${value.country}" data-role="${value.role}" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-edit"></i>
-    </button>
-                                                <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
-    
-                                                    </button>
-                                            </div>
-                                        </td>
-                                    </tr>`
-                                    );
-                                }
-                            });
-                            if (response.length === 0) {
-                                $('tbody').append(
-                                    '<tr><td colspan="12" class="text-center">No subcategories found</td></tr>'
-                                );
-                            }
-                        },
-                        error: function() {
-                            alert("Error while searching");
-                        }
+                if ($('#from').val() && $('#to').val() && $('.searchInput').val()) {
+                    console.log($('#from').val() + " " + $('#to').val() + " " + $('.searchInput')
+                        .val());
+                    $.post('{{ route('filter-data') }}', {
+                        _token: '{{ csrf_token() }}',
+                        data: 'user',
+                        from: $('#from').val(),
+                        to: $('#to').val(),
+                        search: $('.searchInput').val()
+                    }, function(response) {
+                        console.log(response);
+                        $("tbody").empty();
+                        loadData(response);
                     });
 
-                } else if (type == "date") {
-                    const from = $('#from').val();
-                    const to = $('#to').val();
-                    if (!from || !to) {
-                        alert("Please select both FROM and TO dates.");
-                        return;
-                    }
-                    console.log("From:", from, "To:", to);
-                    $.ajax({
-                        url: '{{ route('common.getdatedata') }}',
-                        type: 'POST',
-                        data: {
-                            data: "user",
-                            from: from,
-                            to: to,
-                        },
-                        success: function(response) {
-                            console.log(response);
-
-                            $("tbody").empty(); // Clear existing rows
-                            $.each(response, function(key, value) {
-                                if (value.role != 'admin') {
-                                    $('tbody').append(
-                                        `<tr>
-                                    <td>${key+1}</td>
-                                    <td>${value.name}</td>
-                                    <td>${value.email}</td>
-                                    <td>${value.role}</td>
-                                    <td>${value.country ? value.country : 'N/A'}</td>
-                                    <td>${new Date(value.created_at).toLocaleString()}</td>
-                                    <td>
-                                        <div class="d-flex gap-1">
-                                            <button class="btn btn-sm btn-warning editBtn" data-id="${value.id}" data-name="${value.name}" data-email="${value.email}" data-country="${value.country}" data-role="${value.role}" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-edit"></i>
-</button>
-                                            <button class="btn btn-sm btn-danger deleteBtn" data-id="${value.id}"><i class="fas fa-trash-alt"></i>
-</button>
-                                        </div>
-                                    </td>
-                                </tr>`
-                                    );
-                                }
-                            });
-                            if (response.length === 0) {
-                                $('tbody').append(
-                                    '<tr><td colspan="12" class="text-center">No products found</td></tr>'
-                                );
-                            }
-                        },
-                        error: function(xhr) {
-                            let errMsg = xhr.responseJSON?.error || 'Something went wrong';
-                            alert('Error: ' + errMsg);
-                            console.error('Error details:', xhr.responseText);
-                        }
-                    });
                 } else {
-                    alert("Invalid search type.");
+                    const type = $(this).data('type');
+                    if (!type) {
+                        alert("Search type is not defined.");
+                        return;
+                    }
+
+                    if (type === "name") {
+                        const searchValue = $(this).siblings('.searchInput').val();
+                        if (!searchValue) {
+                            alert("Please enter a search value.");
+                            return;
+                        }
+                        console.log("Search Type:", type);
+                        console.log("Search Value:", searchValue);
+                        $.ajax({
+                            url: '{{ route('common.getdata') }}',
+                            type: 'POST',
+                            data: {
+                                data: "user",
+                                search: searchValue,
+                            },
+                            success: function(response) {
+                                console.log(response);
+                                $("tbody").empty();
+                                loadData(response);
+                            },
+                            error: function() {
+                                alert("Error while searching");
+                            }
+                        });
+
+                    } else if (type == "date") {
+                        const from = $('#from').val();
+                        const to = $('#to').val();
+                        if (!from || !to) {
+                            alert("Please select both FROM and TO dates.");
+                            return;
+                        }
+                        console.log("From:", from, "To:", to);
+                        $.ajax({
+                            url: '{{ route('common.getdatedata') }}',
+                            type: 'POST',
+                            data: {
+                                data: "user",
+                                from: from,
+                                to: to,
+                            },
+                            success: function(response) {
+                                console.log(response);
+                                $("tbody").empty();
+                                loadData(response);
+                            },
+                            error: function(xhr) {
+                                let errMsg = xhr.responseJSON?.error ||
+                                    'Something went wrong';
+                                alert('Error: ' + errMsg);
+                                console.error('Error details:', xhr.responseText);
+                            }
+                        });
+                    } else {
+                        alert("Invalid search type.");
+                    }
                 }
 
             });
 
+
+            $('#reset').on('click', function() {
+                $('#from').val('');
+                $('#to').val('');
+                $('.searchInput').val('');
+
+                // window.location.reload();
+                $.ajax({
+                    url: '{{ route('admin.usersData') }}',
+                    type: 'GET',
+                    success: function(response) {
+                        console.log(response);
+                        response = typeof response === 'string' ? JSON.parse(response) :
+                            response;
+                        // response = ();
+                        $("tbody").empty();
+                        loadData(response.data);
+                    },
+                    error: function(xhr) {
+                        console.error("error");
+                    },
+                });
+
+            });
         });
     </script>
 @endpush

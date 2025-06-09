@@ -53,6 +53,7 @@
                 width: 100%;
             }
         </style>
+
 </head>
 
 <body>
@@ -89,6 +90,9 @@
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
 
                             @auth
+                                <a class="dropdown-item" href="{{ route('admin.profile') }}">
+                                    <i class="mdi mdi-account-circle-outline me-2 text-primary"></i> Profile
+                                </a>
                                 <a class="dropdown-item" href="{{ route('logout') }}">
                                     <i class="mdi mdi-logout me-2 text-primary"></i> Signout
                                 </a>
@@ -153,6 +157,13 @@
                             </a>
                         </li>
                     @endif
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.profile') }}">
+                            <span class="menu-title">Profile</span>
+                            <i class="mdi mdi-view-list menu-icon"></i>
+                        </a>
+                    </li>
                 </ul>
             </nav>
 
@@ -212,11 +223,28 @@
                     autoclose: true,
                     todayHighlight: true
                 });
+
+                $('#from').datepicker({
+                    format: 'yyyy-mm-dd',
+                    autoclose: true,
+                    todayHighlight: true
+                }).on('changeDate', function(e) {
+                    const fromDate = $('#from').datepicker('getDate');
+                    $('#to').datepicker('setStartDate', fromDate);
+                });
+
+                $('#to').datepicker({
+                    format: 'yyyy-mm-dd',
+                    autoclose: true,
+                    todayHighlight: true
+                }).on('changeDate', function(e) {
+                    const toDate = $('#to').datepicker('getDate');
+                    $('#from').datepicker('setEndDate', toDate);
+                });
+
             });
-
-
-            
         </script>
+
         <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
         @stack('scripts')

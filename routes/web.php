@@ -20,6 +20,8 @@ Route::get('/error', function () {
     abort(500);
 });
 
+Route::get('/admin/profile', [AdminControllerMain::class, 'profile'])->name('admin.profile');
+
 Route::get('/admin/logout', [AdminControllerMain::class, 'logout'])->name('admin.logout');
 Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard')->middleware(Validuser::class);
 
@@ -53,6 +55,11 @@ Route::middleware([Validuser::class, RoleMiddleware::class])->group(function () 
         ->name('admin.products');
     Route::post('/admin/productstore', [AdminControllerMain::class, 'productstore'])
         ->name('admin.productstore');
+
+    Route::get('/admin/usersData', [AdminControllerMain::class, 'usersData'])->name('admin.usersData');
+    Route::get('/admin/categorysData', [AdminControllerMain::class, 'categorysData'])->name('admin.categorysData');
+    Route::get('/admin/subcategorysData', [AdminControllerMain::class, 'subcategorysData'])->name('admin.subcategorysData');
+    Route::get('/admin/productsData', [AdminControllerMain::class, 'productsData'])->name('admin.productsData');
 });
 
 
